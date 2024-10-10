@@ -84,18 +84,15 @@ The temperature distribution in the domain using a 80x80 mesh is shown below
 A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the [report](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/Reports/2D%20Diffusion%20Report.pdf).
 
 ### 2D Convection-Diffusion:  
-Here, we consider the problem of heat convection and conduction with a given mesh and velocity field as shown in Fig. 4 below, along with the computational domain.
-
+Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/b7cfd549-2e8f-4647-8b99-4ec413275275)"  alt="Figure 4: Computational domain and given velocity field" style="width: 50%;">
+  <img src="https://github.com/user-attachments/assets/56bc87d1-6d62-448b-829b-838403af134e" alt="Figure 4: Computational domain and the given velocity field" style="width: 80%;">
 </p>
 <p align="center">
-  <em>Figure 4: Computational domain and given velocity field</em>
+  <em>Figure 4: Computational domain and the given velocity field</em>
 </p>
 
-
-
-The governing equation for the temperature with convection and diffusion is given as,
+The dimensions for the domain and given physical values are $\rho = 1$, $k/C_p = 1/50$, and $h_A/H = h_C/H = 0.068$. The boundary conditions are $U_A = 1$, $U_B = 0$, $U_C = 1$, $V_D = 0$, $T_A = 20^\circ C$, and at $x = L$ (other than the outlet), $T = 50^\circ C$. The governing equation for the temperature with convection and diffusion is given as,
 ```math
 \frac{\partial}{\partial x} (\rho U T) + \frac{\partial}{\partial y} (\rho V T) = \frac{\partial}{\partial x} \left( \Gamma \frac{\partial T}{\partial x} \right) + \frac{\partial}{\partial y} \left( \Gamma \frac{\partial T}{\partial y} \right) + S, \quad \text{where } \Gamma = \frac{k}{C_p}
 ```
@@ -125,4 +122,3 @@ This is applied to each face to get the discretized equations. The system of lin
 
 **References:**  
 [1] H. Versteeg and W. Malalasekera. An Introduction to Computational Fluid Dynamics - The Finite Volume Method. Longman Scientific & Technical, Harlow, England, 1st edition, 1995.
-
