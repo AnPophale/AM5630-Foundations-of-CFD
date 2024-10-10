@@ -1,6 +1,6 @@
 # AM5630-Foundations-of-CFD
 
-This course included 2 assignments using the Finite Volume Method - 2D diffusion and 2D convection-diffusion for scalar transport. The codes can be found in the MATLAB codes folder along with the reports. Following is an explanation of the governing equations, discretization schemes and results for both the cases.
+This course included two assignments, implementing the Finite Volume Method in MATLAB: 2D diffusion and 2D convection-diffusion for scalar transport. The codes can be found in the [MATLAB codes](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/MATLAB%20Codes) folder, along with the [reports](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/Reports). Below is an explanation of the governing equations, discretization schemes, and results for both cases.
 
 ### 2D Diffusion:  
 We consider the problem of 2D heat conduction as given below,
@@ -25,7 +25,7 @@ The governing equation for 2D heat conduction with a source term is given as,
 + \frac{\partial}{\partial y} \left( k \frac{\partial T}{\partial y} \right) + S = 0
 ```
 
-We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. The complete details of the theory for the Finite Volume Method can be found in [1]. Consider a control volume given as below.
+We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. The complete details of the theory for the Finite Volume Method can be found in [1]. Consider a control volume shown in Fig. 2.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/78aef86c-a432-41ee-8134-2b53732948c8"  alt=Figure 2: 2D Control Volume for the Finite Volume Method" style="width: 30%;">
@@ -34,7 +34,7 @@ We use the Finite Volume Method with central difference scheme and source term l
   <em>Figure 2: 2D Control Volume for the Finite Volume Method</em>
 </p>
 
-Integrating the equation over this 2D control volume, we get,
+Integrating the governing differential equation over this 2D control volume, we get,
 
 ```math
 0 = \int_w^e \int_s^n \frac{\partial}{\partial x} \left( k \frac{\partial T}{\partial x} \right) \, dx \, dy 
@@ -64,12 +64,12 @@ a_{N} = \frac{k_{n} \Delta x}{\delta x_{s}}, \quad
 a_{P} = a_{W} + a_{E} + a_{S} + a_{N} 
 ```
 
-A negative constant source term can give divergence during the numerical procedure to solve the system of equations, hence we make the following adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
+A negative constant source term can lead to diverging results during the numerical procedure to solve the system of equations, hence we make the following adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
 ```math
 a_{P} = a_{W} + a_{E} + a_{S} + a_{N} + \frac{S \Delta x \Delta y}{T_{old}}
 ```
 
-These equations are applied to each control volume in the discretized domain and the resulting system of linear equations is solved using the Gauss Seidel method.
+These equations are applied to each control volume in the discretized domain and the resulting system of linear equations is solved using the Gauss Seidel method. The code implementing the above described method is given [here](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/MATLAB%20Codes/2D_Diffusion.m).
 
 **Results**:  
 The temperature distribution in the domain using a 80x80 mesh is shown below
@@ -84,14 +84,40 @@ The temperature distribution in the domain using a 80x80 mesh is shown below
 A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the report.
 
 ### 2D Convection-Diffusion:  
-Here, we consider the problem of heat convection and conduction with a given velocity field
-The velocity field given is plotted below
-The computational domain and the boundary condition are given as follows
+Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/cb009fa5-f98a-448b-9cda-b69eda31fb50" alt="Figure 4: Given velocity field in the 2D domain" style="width: 50%;">
+</p>
+<p align="center">
+  <em>Figure 4: Given velocity field in the 2D domain</em>
+</p>
 
-We apply the FVM discretiztion procedure as described previously using the central difference scheme for diffuseive terms but here, we use the hybrid scheme for the convective term
-Onn integration, the convective term gives
-This is calcullated in the hybrid scheme as an upwind or central differencing scheme based on the cell Peclet number which is defined as 
+The governing equation for temperauture with convection and diffusion is given as,
+```math
+\frac{\partial}{\partial x} (\rho U T) + \frac{\partial}{\partial y} (\rho V T) = \frac{\partial}{\partial x} \left( \Gamma \frac{\partial T}{\partial x} \right) + \frac{\partial}{\partial y} \left( \Gamma \frac{\partial T}{\partial y} \right) + S, \quad \text{where } \Gamma = \frac{k}{C_p}
+```
 
+We apply the FVM discretiztion procedure as described previously using the central difference scheme for diffuseive terms but here, we use the hybrid scheme for the convective term which is explained below.
+On integration, the convective term gives
+```math
+(\rho U T)_{w} \Delta y - (\rho U T)_{e} \Delta y + (\rho V T)_{n} \Delta x - (\rho V T)_{s} \Delta x
+```
+Again as done in the FVM, all variables are stored at cell centers and values are not known at the cell faces. As the velocity profile is already known at the cell centers, it can be interpolated to the cell faces. But the calculate the unknown T at the cell faces, we need some discretization scheme for which we use the hybrid scheme. The temperature values at the cell faces is calcullated in the hybrid scheme as an upwind or central differencing scheme based on the cell Peclet number.  Essentially, based on the ratio of convection to diffusion at each cell, either the central difference scheme (suitable for diffusion) or the first order upwind scheme (suitable for convection) is used.The formulation for the hybrid scheme is given considering the first term in the above equation and it is written as
+
+```math
+T_w = 
+\begin{cases} 
+\frac{T_W + T_P}{2} & \text{if } |Pe_w| < 2 \quad (\text{Central Difference}) \\ 
+T_W & \text{if } Pe_w > 2 \quad (\text{First order Upwind}) \\ 
+T_P & \text{if } Pe_w < -2 \quad (\text{First order Upwind}) 
+\end{cases}
+\quad \text{where } Pe_w = \frac{\rho U_w \Delta x_e}{\Gamma}
+```
+
+THis is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given as 2D_Convection_Diffusion.m 
 
 **Results:** 
+
+**References:**  
+[1] H. Versteeg and W. Malalasekera. An Introduction to Computational Fluid Dynamics - The Finite Volume Method. Longman Scientific & Technical, Harlow, England, 1st edition, 1995.
 
