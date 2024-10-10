@@ -3,40 +3,95 @@
 This course included 2 assignments using the Finite Volume Method - 2D diffusion and 2D convection-diffusion for scalar transport. The codes can be found in the MATLAB codes folder along with the reports. Following is an explanation of the governing equations, discretization schemes and results for both the cases.
 
 ### 2D Diffusion:  
-We consider the problem of 2D heat conduction as given below
-
-![image](https://github.com/user-attachments/assets/c73f4ae1-7728-4de1-8926-f8fa3cbec690)
-
-
+We consider the problem of 2D heat conduction as given below,
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/959fec8f-649d-48de-ac8b-84a3b29b223c" alt="Comparison of turbulence kinetic energy using Reynolds Stress model with wall function and DNS data" style="width: 50%;">
+  <img src="https://github.com/user-attachments/assets/c73f4ae1-7728-4de1-8926-f8fa3cbec690" alt=Figure 1: Domain for 2D heat conduction" style="width: 50%;">
 </p>
 <p align="center">
-  <em>Figure 4: Comparison of turbulence kinetic energy using Reynolds Stress model with wall function and DNS data</em>
+  <em>Figure 1: Domain for 2D heat conduction</em>
 </p>
 
-The boundary conditions are 
+The boundary conditions are,
+- **Boundary 1**: $`T = 15 \, ^\circ \text{C}`$
+- **Boundary 2**: $`T(y) = 5\left(1 - \frac{y}{H}\right) + 15 \sin\left(\frac{\pi y}{H}\right)`$
+- **Boundary 3**: $`T = 10 \, ^\circ \text{C}`$
+- **Boundary 4** (Insulated): $`\frac{\partial T}{\partial x} = 0`$
 
-The thermal condictivity is a function of space given as
-The governinng equation is given as 
+The thermal condictivity is a function of space given as $`k = 16(\frac{y}{H} + 1) `$ and a heat source term is given as $`S = -1.5`$ per unit area.
 
-Where the source term is given as 
+The governing equation for 2D heat conduction with a source term is given as,
+```math
+\frac{\partial}{\partial x} \left( k \frac{\partial T}{\partial x} \right) 
++ \frac{\partial}{\partial y} \left( k \frac{\partial T}{\partial y} \right) + S = 0
+```
 
-We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. Consider a control volume given as below. Integrating the equation over it, we get
+We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. Consider a control volume given as below.
 
-We assume that the source term remains constant over the volume and hence it is not integrated
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/78aef86c-a432-41ee-8134-2b53732948c8"  alt=Figure 2: 2D Control Volume for the Finte Volume Method" style="width: 30%;">
+</p>
+<p align="center">
+  <em>Figure 2: 2D Control Volume for the Finte Volume Method</em>
+</p>
 
-All the variables are only stored at the cell centers, hence to calculate the values at the cell faces, we need different schemes. The central differnce scheme uses following equation to calculte the fluxes at the faces using the values at the cell centers
+Integrating the equation over this 2D control volume, we get,
 
-Substituting this and simplifying, we get the follwing equation
+```math
+0 = \int_w^e \int_s^n \frac{\partial}{\partial x} \left( k \frac{\partial T}{\partial x} \right) \, dx \, dy 
++ \int_s^n \int_w^e \frac{\partial}{\partial y} \left( k \frac{\partial T}{\partial y} \right) \, dx \, dy + \int_w^e \int_s^n S \, dx \, dy
+```
 
-A negative constant source term can give divergence during the numerical procdedure to solve the system of equations, hence we make the follwing adjustment for numerical stability
+We assume that the source term remains constant over the volume and hence it is not integrated. Integrating the other terms, 
+```math
+\left[ k_{e} \Delta y \left( \frac{\partial \phi}{\partial x} \right)_{e} - \, k_{w} \Delta y \left( \frac{\partial \phi}{\partial x} \right)_{w} \right] + \left[ k_{n} \Delta x \left( \frac{\partial \phi}{\partial y} \right)_{n} - \, k_{s} \Delta x \left( \frac{\partial \phi}{\partial y} \right)_{s} \right] + S \Delta x \Delta y = 0
+```
 
-These equations are applied to each control volume in the discretized domain and the resulting system of linear equations is solved using the Gauss Seidel method
+All the variables are only stored at the cell centers, hence to calculate the gradients at the cell faces, we need different schemes. The central differnce scheme uses following equation to calculte the fluxes at the faces using the values at the cell centers.
+
+```math
+\left( \frac{dT}{dx} \right)_{e} = \frac{T_{E} - T_{P}}{\delta x_e}, \quad 
+\left( \frac{dT}{dx} \right)_{w} = \frac{T_{P} - T_{W}}{\delta x_w}, \quad 
+\left( \frac{dT}{dx} \right)_{n} = \frac{T_{N} - T_{P}}{\delta y_n}, \quad 
+\left( \frac{dT}{dx} \right)_{s} = \frac{T_{P} - T_{S}}{\delta y_s}
+```
+
+Substituting this into the previous equaiotn and rearranging it in a form given as $`a_P T_P = a_E T_E + a_W T_W + a_N T_N + a_S T_S + S \Delta x \Delta y `$ we have
+```math
+a_{W} = \frac{k_{w} \Delta y}{\delta x_{e}}, \quad 
+a_{E} = \frac{k_{e} \Delta y}{\delta x_{w}}, \quad 
+a_{S} = \frac{k_{s} \Delta x}{\delta x_{n}}, \quad 
+a_{N} = \frac{k_{n} \Delta x}{\delta x_{s}}, \quad 
+a_{P} = a_{W} + a_{E} + a_{S} + a_{N} 
+```
+
+A negative constant source term can give divergence during the numerical procdedure to solve the system of equations, hence we make the follwing adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
+```math
+a_{P} = a_{W} + a_{E} + a_{S} + a_{N} + \frac{S \Delta x \Delta y}{T_{old}}
+```
+
+These equations are applied to each control volume in the discretized domain and the resulting system of linear equations is solved using the Gauss Seidel method.
 
 **Results**:  
+The temperature distribution in the domain using a 80x80 mesh is shown below
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/0e842e6d-f90d-4c3d-bcb2-944f632b78a7"  alt="Figure 3: Temperature field in the domain" style="width: 50%;">
+</p>
+<p align="center">
+  <em>Figure 3: Temperature field in the domain</em>
+</p>
+
+A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the report.
 
 ### 2D Convection-Diffusion:  
+Here, we consider the problem of heat convection and conduction with a given velocity field
+The velocity field given is plotted below
+The computational domain and the boundary condition are given as follows
+
+We apply the FVM discretiztion procedure as described previously using the central difference scheme for diffuseive terms but here, we use the hybrid scheme for the convective term
+Onn integration, the convective term gives
+This is calcullated in the hybrid scheme as an upwind or central differencing scheme based on the cell Peclet number which is defined as 
 
 
+**Results:** 
 
