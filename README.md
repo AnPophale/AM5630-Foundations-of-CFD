@@ -81,7 +81,7 @@ The temperature distribution in the domain using a 80x80 mesh is shown below
   <em>Figure 3: Temperature field in the domain</em>
 </p>
 
-A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the report.
+A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the [report](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/Reports/2D%20Diffusion%20Report.pdf).
 
 ### 2D Convection-Diffusion:  
 Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data.
@@ -92,17 +92,19 @@ Here, we consider the problem of heat convection and conduction with a given vel
   <em>Figure 4: Given velocity field in the 2D domain</em>
 </p>
 
-The governing equation for temperauture with convection and diffusion is given as,
+The governing equation for the temperature with convection and diffusion is given as,
 ```math
 \frac{\partial}{\partial x} (\rho U T) + \frac{\partial}{\partial y} (\rho V T) = \frac{\partial}{\partial x} \left( \Gamma \frac{\partial T}{\partial x} \right) + \frac{\partial}{\partial y} \left( \Gamma \frac{\partial T}{\partial y} \right) + S, \quad \text{where } \Gamma = \frac{k}{C_p}
 ```
 
-We apply the FVM discretiztion procedure as described previously using the central difference scheme for diffuseive terms but here, we use the hybrid scheme for the convective term which is explained below.
+We apply the FVM discretization procedure as described previously using the central difference scheme for diffusive terms but here, we use the hybrid scheme for the convective term which is explained below.
 On integration, the convective term gives
 ```math
 (\rho U T)_{w} \Delta y - (\rho U T)_{e} \Delta y + (\rho V T)_{n} \Delta x - (\rho V T)_{s} \Delta x
 ```
-Again as done in the FVM, all variables are stored at cell centers and values are not known at the cell faces. As the velocity profile is already known at the cell centers, it can be interpolated to the cell faces. But the calculate the unknown T at the cell faces, we need some discretization scheme for which we use the hybrid scheme. The temperature values at the cell faces is calcullated in the hybrid scheme as an upwind or central differencing scheme based on the cell Peclet number.  Essentially, based on the ratio of convection to diffusion at each cell, either the central difference scheme (suitable for diffusion) or the first order upwind scheme (suitable for convection) is used.The formulation for the hybrid scheme is given considering the first term in the above equation and it is written as
+Again as done in the FVM, all variables are stored at cell centers and values are not known at the cell faces. As the velocity profile is already known at the cell centers, it can be interpolated to the cell faces. But the calculate the unknown T at the cell faces, we need some discretization scheme for which we use the hybrid scheme. 
+
+The temperature values at the cell faces is calculated in the hybrid scheme as an upwind or central differencing scheme based on the cell Peclet number.  Essentially, based on the ratio of convection to diffusion at each cell, either the central difference scheme (suitable for diffusion) or the first order upwind scheme (suitable for convection) is used. The formulation for the hybrid scheme is given considering the first term ($`T_w`$) in the above equation and it is written as,
 
 ```math
 T_w = 
@@ -111,10 +113,10 @@ T_w =
 T_W & \text{if } Pe_w > 2 \quad (\text{First order Upwind}) \\ 
 T_P & \text{if } Pe_w < -2 \quad (\text{First order Upwind}) 
 \end{cases}
-\quad \text{where } Pe_w = \frac{\rho U_w \Delta x_e}{\Gamma}
+\quad \text{where } Pe_w = \frac{\rho U_w \Delta x_w}{\Gamma}
 ```
 
-THis is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given as 2D_Convection_Diffusion.m 
+This is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given in the codes folder as 2D_Convection_Diffusion.m 
 
 **Results:** 
 
