@@ -17,7 +17,7 @@ The boundary conditions are,
 - **Boundary 3**: $`T = 10 \, ^\circ \text{C}`$
 - **Boundary 4** (Insulated): $`\frac{\partial T}{\partial x} = 0`$
 
-The thermal condictivity is a function of space given as $`k = 16(\frac{y}{H} + 1) `$ and a heat source term is given as $`S = -1.5`$ per unit area.
+The thermal conductivity is a function of space given as $`k = 16(\frac{y}{H} + 1) `$ and a heat source term is given as $`S = -1.5`$ per unit area.
 
 The governing equation for 2D heat conduction with a source term is given as,
 ```math
@@ -25,13 +25,13 @@ The governing equation for 2D heat conduction with a source term is given as,
 + \frac{\partial}{\partial y} \left( k \frac{\partial T}{\partial y} \right) + S = 0
 ```
 
-We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. Consider a control volume given as below.
+We use the Finite Volume Method with central difference scheme and source term linearization to discretize the equations. In finite volume method, the governing differential equation is first integrated over a control volume. The complete details of the theory for the Finite Volume Method can be found in [1]. Consider a control volume given as below.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/78aef86c-a432-41ee-8134-2b53732948c8"  alt=Figure 2: 2D Control Volume for the Finte Volume Method" style="width: 30%;">
+  <img src="https://github.com/user-attachments/assets/78aef86c-a432-41ee-8134-2b53732948c8"  alt=Figure 2: 2D Control Volume for the Finite Volume Method" style="width: 30%;">
 </p>
 <p align="center">
-  <em>Figure 2: 2D Control Volume for the Finte Volume Method</em>
+  <em>Figure 2: 2D Control Volume for the Finite Volume Method</em>
 </p>
 
 Integrating the equation over this 2D control volume, we get,
@@ -46,7 +46,7 @@ We assume that the source term remains constant over the volume and hence it is 
 \left[ k_{e} \Delta y \left( \frac{\partial \phi}{\partial x} \right)_{e} - \, k_{w} \Delta y \left( \frac{\partial \phi}{\partial x} \right)_{w} \right] + \left[ k_{n} \Delta x \left( \frac{\partial \phi}{\partial y} \right)_{n} - \, k_{s} \Delta x \left( \frac{\partial \phi}{\partial y} \right)_{s} \right] + S \Delta x \Delta y = 0
 ```
 
-All the variables are only stored at the cell centers, hence to calculate the gradients at the cell faces, we need different schemes. The central differnce scheme uses following equation to calculte the fluxes at the faces using the values at the cell centers.
+All the variables are only stored at the cell centers, hence to calculate the gradients at the cell faces, we need different schemes. The central difference scheme uses following equation to calculate the fluxes at the faces using the values at the cell centers.
 
 ```math
 \left( \frac{dT}{dx} \right)_{e} = \frac{T_{E} - T_{P}}{\delta x_e}, \quad 
@@ -55,7 +55,7 @@ All the variables are only stored at the cell centers, hence to calculate the gr
 \left( \frac{dT}{dx} \right)_{s} = \frac{T_{P} - T_{S}}{\delta y_s}
 ```
 
-Substituting this into the previous equaiotn and rearranging it in a form given as $`a_P T_P = a_E T_E + a_W T_W + a_N T_N + a_S T_S + S \Delta x \Delta y `$ we have
+Substituting this into the previous equation and rearranging it in a form given as $`a_P T_P = a_E T_E + a_W T_W + a_N T_N + a_S T_S + S \Delta x \Delta y `$ we have
 ```math
 a_{W} = \frac{k_{w} \Delta y}{\delta x_{e}}, \quad 
 a_{E} = \frac{k_{e} \Delta y}{\delta x_{w}}, \quad 
@@ -64,7 +64,7 @@ a_{N} = \frac{k_{n} \Delta x}{\delta x_{s}}, \quad
 a_{P} = a_{W} + a_{E} + a_{S} + a_{N} 
 ```
 
-A negative constant source term can give divergence during the numerical procdedure to solve the system of equations, hence we make the follwing adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
+A negative constant source term can give divergence during the numerical procedure to solve the system of equations, hence we make the following adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
 ```math
 a_{P} = a_{W} + a_{E} + a_{S} + a_{N} + \frac{S \Delta x \Delta y}{T_{old}}
 ```
