@@ -84,13 +84,16 @@ The temperature distribution in the domain using a 80x80 mesh is shown below
 A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the [report](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/Reports/2D%20Diffusion%20Report.pdf).
 
 ### 2D Convection-Diffusion:  
-Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data.
+Here, we consider the problem of heat convection and conduction with a given mesh and velocity field as shown in Fig. 4 below, along with the computational domain.
+
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/cb009fa5-f98a-448b-9cda-b69eda31fb50" alt="Figure 4: Given velocity field in the 2D domain" style="width: 50%;">
+  <img src="https://github.com/user-attachments/assets/b7cfd549-2e8f-4647-8b99-4ec413275275)"  alt="Figure 4: Computational domain and given velocity field" style="width: 50%;">
 </p>
 <p align="center">
-  <em>Figure 4: Given velocity field in the 2D domain</em>
+  <em>Figure 4: Computational domain and given velocity field</em>
 </p>
+
+
 
 The governing equation for the temperature with convection and diffusion is given as,
 ```math
