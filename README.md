@@ -1,6 +1,6 @@
 # AM5630-Foundations-of-CFD
 
-This course included two assignments, implementing the Finite Volume Method in MATLAB: 2D diffusion and 2D convection-diffusion for scalar transport. The codes can be found in the [MATLAB codes](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/MATLAB%20Codes) folder, along with the [reports](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/Reports). Below is an explanation of the governing equations, discretization schemes, and results for both cases.
+This course included two assignments, implementing the Finite Volume Method in MATLAB for 2D diffusion and 2D convection-diffusion for scalar transport. The codes can be found in the [MATLAB codes](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/MATLAB%20Codes) folder, along with the [reports](https://github.com/AnPophale/AM5630-Foundations-of-CFD/tree/main/Reports). Below is an explanation of the governing equations, discretization schemes, and results for both cases.
 
 ### 2D Diffusion:  
 We consider the problem of 2D heat conduction as given below,
