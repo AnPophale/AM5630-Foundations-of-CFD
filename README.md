@@ -113,12 +113,13 @@ T_w =
 T_W & \text{if } Pe_w > 2 \quad (\text{First order Upwind}) \\ 
 T_P & \text{if } Pe_w < -2 \quad (\text{First order Upwind}) 
 \end{cases}
-\quad \text{where } Pe_w = \frac{\rho U_w \Delta x_w}{\Gamma}
+\quad \text{where } Pe_w = \frac{\rho U_w \delta x_w}{\Gamma}
 ```
 
-This is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given in the codes folder as 2D_Convection_Diffusion.m 
+This is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given in the codes folder as [2D_Convection_Diffusion.m](). 
 
-**Results:** 
+**Results:**  
+The contour plot of the temperature distribustion in given in Fig. 5 and using this, the unknown outlet temperature of the fluid can be calculated. Along with this the effect of changes in boundary conditions is studied, details of which can be found in the [report]()
 
 **References:**  
 [1] H. Versteeg and W. Malalasekera. An Introduction to Computational Fluid Dynamics - The Finite Volume Method. Longman Scientific & Technical, Harlow, England, 1st edition, 1995.
