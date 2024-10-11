@@ -116,10 +116,17 @@ T_P & \text{if } Pe_w < -2 \quad (\text{First order Upwind})
 \quad \text{where } Pe_w = \frac{\rho U_w \delta x_w}{\Gamma}
 ```
 
-This is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given in the codes folder as [2D_Convection_Diffusion.m](). 
+This is applied to each face to get the discretized equations. The system of linear equations generated is solved using the Gauss Seidel as well as an iterative 2D Tri Diagonal Matrix Algorithm (TDMA) considering different sweep directions. The MATLAB code for this is given in the codes folder as [2D_Convection_Diffusion.m](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/MATLAB%20Codes/2D_Convection_Diffusion.m). 
 
 **Results:**  
-The contour plot of the temperature distribustion in given in Fig. 5 and using this, the unknown outlet temperature of the fluid can be calculated. Along with this the effect of changes in boundary conditions is studied, details of which can be found in the [report]()
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9c2c4125-9ba0-4e3c-910d-76ac4c0f12da" alt="Figure 5: Temperature distribution in the domain" style="width: 50%;">
+</p>
+<p align="center">
+  <em>Figure 5: Temperature distribution in the domain</em>
+</p>
+
+The plot of the temperature distribution in given in Fig. 5 and using this, the unknown outlet temperature of the fluid can be calculated. Along with this the effect of changes in boundary conditions and the effect of different iterative techniques on the solution convergence is studied, details of which can be found in the [report](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/Reports/2D%20Convection%20Diffusion%20Report.pdf).
 
 **References:**  
 [1] H. Versteeg and W. Malalasekera. An Introduction to Computational Fluid Dynamics - The Finite Volume Method. Longman Scientific & Technical, Harlow, England, 1st edition, 1995.
