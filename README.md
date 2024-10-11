@@ -66,7 +66,7 @@ a_{P} = a_{W} + a_{E} + a_{S} + a_{N}
 
 A negative constant source term can lead to diverging results during the numerical procedure to solve the system of equations, hence we make the following adjustment for numerical stability shifting the source term to the LHS from the RHS, using $`T_old`$ which is the value of the temperature from the previous iteration.
 ```math
-a_{P} = a_{W} + a_{E} + a_{S} + a_{N} + \frac{S \Delta x \Delta y}{T_{old}}
+a_{P} = a_{W} + a_{E} + a_{S} + a_{N} - \frac{S \Delta x \Delta y}{T_{old}}
 ```
 
 These equations are applied to each control volume in the discretized domain and the resulting system of linear equations is solved using the Gauss Seidel method. The code implementing the above described method is given [here](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/MATLAB%20Codes/2D_Diffusion.m).
