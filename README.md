@@ -84,7 +84,7 @@ The temperature distribution in the domain using a 80x80 mesh is shown below
 A grid convergence study is also performed to find the optimal mesh size. A stretch mesh with smaller elements near the boundary with large gradients is also used and the results are compared with larger grid sizes to compare the performance. The variation of the residual vs number of iteration for various convergence criteria is also conducted. The effect of changing the boundary conditions is also explored and the details of all the analysis can be found in the [report](https://github.com/AnPophale/AM5630-Foundations-of-CFD/blob/main/Reports/2D%20Diffusion%20Report.pdf).
 
 ### 2D Convection-Diffusion:  
-Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data.
+Here, we consider the problem of heat convection and conduction with a given velocity field as shown in Fig. 4 below along with given mesh data. This data is required to run the MATLAB code and the data files containing the veclocity field and mesh points can be found in the MATLAB codes folder
 <p align="center">
   <img src="https://github.com/user-attachments/assets/56bc87d1-6d62-448b-829b-838403af134e" alt="Figure 4: Computational domain and the given velocity field" style="width: 80%;">
 </p>
